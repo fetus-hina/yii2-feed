@@ -1,0 +1,25 @@
+{
+    "name": "jp3cki/yii2-feed",
+    "description": "Zend Feed Writer wrapper for Yii Framework 2",
+    "type": "yii2-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "AIZAWA Hina",
+            "email": "hina@bouhime.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">= 7.1",
+
+        "yiisoft/yii2": "2.0.*",
+        "zendframework/zend-feed": "^2.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "jp3cki\\yii2\\feed\\": "src/"
+        }
+    }
+}
