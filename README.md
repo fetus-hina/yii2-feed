@@ -1,7 +1,8 @@
 jp3cki/yii2-feed
 ================
 
-This is zend feed writer wrapper for Yii 2.
+This is a zend feed writer wrapper for Yii 2.  
+You can put RSS and Atom feeds easy.
 
 License
 -------
