@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace jp3cki\yii2\feed;
 
 use Yii;
-use Zend\Feed\Writer\Entry as FeedEntry;
 use Zend\Feed\Writer\Feed as FeedWriter;
 use yii\base\InvalidConfigException;
 use yii\base\Widget;
@@ -19,6 +18,7 @@ class Feed extends Widget
 
     public $type = self::TYPE_RSS;
     public $dataProvider; // instanceof \yii\data\DataProviderInterface
+    public $entryClass = Entry::class;
     public $entry = [];
 
     protected $instance;
@@ -61,26 +61,26 @@ class Feed extends Widget
 
         foreach ($this->dataProvider->getModels() as $model) {
             $entry = $this->processEntry(
-                $this->instance->createEntry(),
+                new $this->entryClass($this->instance->createEntry()),
                 $model
             );
             if ($entry) {
-                $this->instance->addEntry($entry);
+                $this->instance->addEntry($entry->getZendInstance());
             }
         }
     }
 
-    protected function processEntry(FeedEntry $feedEntry, $model): ?FeedEntry
+    protected function processEntry(Entry $entry, $model): ?Entry
     {
         foreach ($this->entry as $key => $valueOrCallback) {
             $value = is_callable($valueOrCallback)
-                ? call_user_func($valueOrCallback, $model, $key, $feedEntry, $this)
-                : $value;
+                ? call_user_func($valueOrCallback, $model, $key, $entry, $this)
+                : $valueOrCallback;
 
-            call_user_func([$feedEntry, 'set' . $key], $value);
+            $entry->$key = $value;
         }
 
-        return $feedEntry;
+        return $entry;
     }
 
     protected function renderFeed(): string

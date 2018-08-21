@@ -10,6 +10,8 @@ use yii\helpers\ArrayHelper;
 
 trait FeedProperties
 {
+    use TimestampBehavior;
+
     public function getAuthors(): array
     {
         return $this->instance->getAuthors() ?? [];
@@ -270,33 +272,5 @@ trait FeedProperties
             'term' => $term,
             'scheme' => $scheme,
         ]]);
-    }
-
-    private static function normalizeDateTimeForGet(?DateTimeInterface $at): ?DateTimeImmutable
-    {
-        if ($at === null) {
-            return null;
-        }
-
-        return ($at instanceof DateTimeImmutable)
-            ? $at
-            : DateTimeImmutable::createFromMutable($at);
-    }
-
-    private static function normalizeDateTimeForSet(?DateTimeInterface $at): DateTime
-    {
-        if ($at === null) {
-            return new DateTime();
-        }
-
-        if ($at instanceof DateTime) {
-            return $at;
-        }
-
-        if (version_compare(PHP_VERSION, '7.3.0-beta', '>=')) {
-            return DateTime::createFromImmutable($at);
-        }
-
-        return new DateTime('@' . $at->getTimestamp(), $at->getTimezone());
     }
 }
